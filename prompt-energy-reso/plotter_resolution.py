@@ -22,7 +22,7 @@ def has_branch(fname, branch):
         return False
     return t.GetBranchStatus(branch)
 
-def cbFit(h, name, Run, energy, output_dir, xmin=-1, xmax=-1):
+def cbFit(h, name, energy, output_dir, xmin=-1, xmax=-1):
 
     x = ROOT.RooRealVar(f"x_{name}_{energy}", "Energy [ADC]", h.GetXaxis().GetXmin(), h.GetXaxis().GetXmax())
 
@@ -32,9 +32,28 @@ def cbFit(h, name, Run, energy, output_dir, xmin=-1, xmax=-1):
 
 
     h.GetXaxis().SetRangeUser(500,8000)
+    h.GetXaxis().SetRangeUser(h.GetMean()-1*h.GetRMS(),h.GetMean()+1*h.GetRMS())
+    print("++++++++++++++++++++++++++++++++++++++++++++++++")
+    print(f"mean is is {h.GetMean()}")
+    print(f"RMS is is {h.GetRMS()}")
+    h.GetXaxis().SetRangeUser(h.GetMean()-2*h.GetRMS(),h.GetMean()+2*h.GetRMS())
+    print("++++++++++++++++++++++++++++++++++++++++++++++++")
+    print(f"mean is is {h.GetMean()}")
+    print(f"RMS is is {h.GetRMS()}")
     h.GetXaxis().SetRangeUser(h.GetMean()-3*h.GetRMS(),h.GetMean()+3*h.GetRMS())
+    print("++++++++++++++++++++++++++++++++++++++++++++++++")
+    print(f"mean is is {h.GetMean()}")
+    print(f"RMS is is {h.GetRMS()}")
+    print(f"RMS is is {h.GetRMS()}")
     h.GetXaxis().SetRangeUser(h.GetMean()-3*h.GetRMS(),h.GetMean()+3*h.GetRMS())
+    print("++++++++++++++++++++++++++++++++++++++++++++++++")
+    print(f"mean is is {h.GetMean()}")
+    print(f"RMS is is {h.GetRMS()}")
+    print(f"RMS is is {h.GetRMS()}")
     h.GetXaxis().SetRangeUser(h.GetMean()-3*h.GetRMS(),h.GetMean()+3*h.GetRMS())
+    print("++++++++++++++++++++++++++++++++++++++++++++++++")
+    print(f"mean is is {h.GetMean()}")
+    print(f"RMS is is {h.GetRMS()}")
     peak = h.GetMean()
 
 
@@ -117,9 +136,10 @@ def main(arguments):
 
     parser = argparse.ArgumentParser(description='')
     parser.add_argument("-i",  f"--input-dir", type=str, default = "/eos/cms/store/group/dpg_ecal/comm_ecal/upgrade/testbeam/ECALTB_H4_Jun2026/reco_dqm/", help="input directory containing ROOT file with unpacked tree")
-    parser.add_argument("-ro", f"--plot-output-dir", type=str, default = "/eos/user/m/mcampana/www/h4dqm/prompt_2026_fit", help="directory for output plots")
-    parser.add_argument("-f", f"--fit-output-dir", type=str, default= "/eos/user/m/mcampana/www/h4dqm/prompt_2026_fit" , help="directory for fits")
-    parser.add_argument("-j", f"--run-info-json", type=str, default= "run_info_with_cuts.json", help="run and energy sample")
+    parser.add_argument("-ro", f"--plot-output-dir", type=str, default = "/eos/user/m/mcampana/www/h4dqm/prompt_2026_amp", help="directory for output plots")
+    parser.add_argument("-f", f"--fit-output-dir", type=str, default= "/eos/user/m/mcampana/www/h4dqm/prompt_2026_amp" , help="directory for fits")
+    parser.add_argument("-j", f"--run-info-json", type=str, default= "cuts.json", help="run and energy sample")
+    parser.add_argument("-d", f"--draw-histos", action="store_true", help="draw histograms")
 
     args = parser.parse_args(arguments)
 
@@ -127,6 +147,7 @@ def main(arguments):
     input_dir=args.input_dir
     plot_output_dir=args.plot_output_dir
     fit_output_dir=args.fit_output_dir
+    draw_histos = args.draw_histos
     os.makedirs(plot_output_dir, exist_ok=True)
     os.makedirs(fit_output_dir, exist_ok=True)
 
@@ -137,73 +158,88 @@ def main(arguments):
     Run_list, Ebins, do_fitamp, do_channel_matrix_3x3 = [dd[k] for k in ["run list", "run energies", "do fitamp", "do matrix 3x3"]]
     rows_resolution = []
 
+
     lin = ROOT.TGraphErrors(len(Ebins))
     res = ROOT.TGraphErrors(len(Ebins))
 
     ROOT.gStyle.SetTitleSize(0.045, "XYZ")
+    energy_list=[]
+    if do_fitamp:
+        if do_channel_matrix_3x3:
+            draw_string = "Sum$(ecal_lsfit_amp* (abs(ecal_iphi_within_5x5) < 2) * (abs(ecal_ieta_within_5x5) < 2))"
+            title = "FitAmp_3x3"
+        else:
+            draw_string = "Sum$(ecal_lsfit_amp * (abs(ecal_iphi_within_5x5) < 3) * (abs(ecal_ieta_within_5x5) < 3))"
+            title = "FitAmp_5x5"
+    else:
+        if do_channel_matrix_3x3:
+            draw_string = "Sum$(ecal_charge * (abs(ecal_iphi_within_5x5) < 2) * (abs(ecal_ieta_within_5x5) < 2))"
+            title = "Charge_3x3"
+        else:
+            draw_string = "Sum$(ecal_charge * (abs(ecal_iphi_within_5x5) < 3) * (abs(ecal_ieta_within_5x5) < 3))"
+            title = "Charge_5x5"
 
     for ie in range(len(Ebins)):
 
         c = ROOT.TCanvas()
         c.SetGrid()
-
-        run_list = Run_list[ie]
         energy = Ebins[ie]
-        
-        chain = ROOT.TChain("tree")
-        
-        for run in run_list:
-            pattern = os.path.join(input_dir, f"run_{run}/{run}_*_reco.root")
+        if energy in energy_list:
+            num = energy_list.count("energy") 
+            enegry = int(energy) + (num)
+        filename_histo= f"{title}_{energy}"
+        if draw_histos: 
 
-            for f in glob.glob(pattern):
-                print("testing: ", f)
-                if has_branch(f, "ecal_charge_sum_5x5"):
-                    chain.Add(f)
-                else:
-                    print("Skipping:", f)
+            run_list = Run_list[ie]
+            
+            chain = ROOT.TChain("tree")
+            
+            for run in run_list:
+                pattern = os.path.join(input_dir, f"run_{run}/{run}_*_reco.root")
 
-        print(f"Runs {run_list}: added {chain.GetNtrees()} files")
+                for f in glob.glob(pattern):
+                    print("testing: ", f)
+                    if has_branch(f, "ecal_charge_sum_5x5"):
+                        chain.Add(f)
+                    else:
+                        print("Skipping:", f)
 
-        if do_fitamp:
-            if do_channel_matrix_3x3:
-                h = ROOT.TH1F(f"FitAmp_3x3_{energy}_uncalibrated", "", 8000, 0, 8000)
-                FitAmp_sum_3x3_string = "Sum$(ecal_lsfit_amp* (abs(ecal_iphi_within_5x5) < 2) * (abs(ecal_ieta_within_5x5) < 2))"
-                print("drawing", f"{FitAmp_sum_3x3_string}>>FitAmp_3x3_{energy}_uncalibrated", cut[ie], "goff")
-                chain.Draw(f"{FitAmp_sum_3x3_string}>>FitAmp_3x3_{energy}_uncalibrated", cut[ie], "goff")
-            else:
-                h = ROOT.TH1F(f"FitAmp_5x5_{energy}_uncalibrated", "", 8000, 0, 8000)
-                FitAmp_sum_5x5_string = "Sum$(ecal_lsfit_amp * (abs(ecal_iphi_within_5x5) < 3) * (abs(ecal_ieta_within_5x5) < 3))"
-                print("drawing", f"{FitAmp_sum_5x5_string}>>FitAmp_5x5_{energy}_uncalibrated", cut[ie], "goff")
-                chain.Draw(f"{FitAmp_sum_5x5_string}>>FitAmp_5x5_{energy}_uncalibrated", cut[ie], "goff")
+            print(f"Runs {run_list}: added {chain.GetNtrees()} files")
+            
+            
+            
+            h = ROOT.TH1F(f"{title}_{energy}_uncalibrated", "", 7600, 400, 8000)
+            chain.Draw(f"{draw_string}>>{title}_{energy}_uncalibrated", cut[ie], "goff")
+            print(f"{draw_string}>>{title}_{energy}_uncalibrated")
+            print(f"{cut[ie]}")
+            print("chain draw done")
+            output_file = os.path.join(plot_output_dir,  filename_histo)
+            histo_file=ROOT.TFile(f"{output_file}.root","RECREATE")
+            h.Draw()
+            h.Write()
         else:
-            if do_channel_matrix_3x3:
-                h = ROOT.TH1F(f"Charge_3x3_{energy}_uncalibrated", "", 8000, 0, 8000)
-                Charge_sum_3x3_string = "Sum$(ecal_charge * (abs(ecal_iphi_within_5x5) < 2) * (abs(ecal_ieta_within_5x5) < 2))"
-                print("drawing", f"{Charge_sum_3x3_string}>>Charge_3x3_{energy}_uncalibrated", cut[ie], "goff")
-                chain.Draw(f"{Charge_sum_3x3_string}>>Charge_3x3_{energy}_uncalibrated", cut[ie], "goff")
-            else:
-                h = ROOT.TH1F(f"Charge_5x5_{energy}_uncalibrated", "", 8000, 0, 8000)
-                Charge_sum_5x5_string = "Sum$(ecal_charge * (abs(ecal_iphi_within_5x5) < 3) * (abs(ecal_ieta_within_5x5) < 3))"
-                print("drawing", f"{Charge_sum_5x5_string}>>Charge_5x5_{energy}_uncalibrated", cut[ie], "goff")
-                chain.Draw(f"{Charge_sum_5x5_string}>>Charge_5x5_{energy}_uncalibrated", cut[ie], "goff")
+            input_file = ROOT.TFile(f"{os.path.join(input_dir,filename_histo)}.root","READ")
+            h = input_file.Get(f"{title}_{energy}_uncalibrated")
 
-        print("chain draw done")
-        h.Draw()
+
 
 #####   uncalibrated histo
-        h.GetXaxis().SetRangeUser(500,8000)
-        h.GetXaxis().SetRangeUser(h.GetMean()-3*h.GetRMS(),h.GetMean()+3*h.GetRMS())
-        h.GetXaxis().SetRangeUser(h.GetMean()-3*h.GetRMS(),h.GetMean()+3*h.GetRMS())
-        h.GetXaxis().SetRangeUser(h.GetMean()-3*h.GetRMS(),h.GetMean()+3*h.GetRMS())
+#        h.GetXaxis().SetRangeUser(500,8000)
+#        h.GetXaxis().SetRangeUser(h.GetMean()-1*h.GetRMS(),h.GetMean()+1*h.GetRMS())
+#        h.GetXaxis().SetRangeUser(h.GetMean()-2*h.GetRMS(),h.GetMean()+2*h.GetRMS())
+#        h.GetXaxis().SetRangeUser(h.GetMean()-3*h.GetRMS(),h.GetMean()+3*h.GetRMS())
+#        h.GetXaxis().SetRangeUser(h.GetMean()-3*h.GetRMS(),h.GetMean()+3*h.GetRMS())
+#        h.GetXaxis().SetRangeUser(h.GetMean()-3*h.GetRMS(),h.GetMean()+3*h.GetRMS())
+#
+#
+#        x_min = h.GetMean() - 4*h.GetRMS()
+#        x_max = h.GetMean() + 4*h.GetRMS()
+#
+#        print(f"Min before functinon {x_min}")
+#        print(f"Man before functinon {x_max}")
 
-
-        x_min = h.GetMean() - 4*h.GetRMS()
-        x_max = h.GetMean() + 4*h.GetRMS()
-
-        print(f"Min before functinon {x_min}")
-        print(f"Man before functinon {x_max}")
-
-        results = cbFit(h, h.GetName(), run_list, energy, fit_output_dir, x_min, x_max)
+        '''
+        results = cbFit(h, h.GetName(), energy, fit_output_dir, x_min, x_max)
         mu_val, emu_val = results["mean"]
         sig_val, esig_val = results["sigma"]
 
@@ -218,18 +254,19 @@ def main(arguments):
         res.SetPointError(ie, 0, 100*resolution_error)
 
         rows_resolution.append({
-            "run": run,
             "energy": energy,
             "resolution_uncalib": 100*(sig_val/mu_val),
             "resolution_uncalib_err": 100*resolution_error,
         })
 
 #####
+        '''
 
+    '''
     #saving data
     with open("resolution_points.csv", "w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["run", "energy", "resolution_uncalib", "resolution_uncalib_err"])
+        writer.writerow(["energy", "resolution_uncalib", "resolution_uncalib_err"])
         for row in rows_resolution:
             writer.writerow([
                 row["energy"],
@@ -335,6 +372,7 @@ def main(arguments):
     canvas.Clear()
 
     input("finito")
+    '''
 
 if __name__ == "__main__":
     main(sys.argv[1:])

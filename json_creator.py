@@ -1,8 +1,8 @@
 import pandas as pd
 import json
 
-csv_file = "prompt_energy_analysis_table.csv"
-json_file = "cuts.json"
+csv_file = "prompt_energy_analysis_table_500ohm.csv"
+json_file = "cuts_500ohm.json"
 
 df = pd.read_csv(csv_file,comment="#")
 
@@ -31,11 +31,12 @@ for _, row in df.iterrows():
     ymin, ymax = row["ymin"], row["ymax"]
 
     cut = (
-        f"hodo_y1_single_cl_flag && "
-        f"(hodo_y1_cl0_pos > {ymin} && hodo_y1_cl0_pos < {ymax}) &&"
-        f"hodo_x1_single_cl_flag && hodo_x2_single_cl_flag && "
-        f"(((hodo_x1_cl0_pos + hodo_x2_cl0_pos)/2) > {xmin} && "
-        f"((hodo_x1_cl0_pos + hodo_x2_cl0_pos)/2) < {xmax})"
+   #     f"hodo_y1_single_cl_flag && "
+   #     f"(hodo_y1_cl0_pos > {ymin} && hodo_y1_cl0_pos < {ymax}) &&"
+   #     f"hodo_x1_single_cl_flag && hodo_x2_single_cl_flag && "
+   #     f"(((hodo_x1_cl0_pos + hodo_x2_cl0_pos)/2) > {xmin} && "
+   #     f"((hodo_x1_cl0_pos + hodo_x2_cl0_pos)/2) < {xmax})"
+    "abs(ecal_ieta_centroid-18) < 0.2 && abs(ecal_iphi_centroid-6) < 0.2  && (ecal_charge_seed/ecal_charge_sum_5x5)>0.7"
     )
 
     cuts.append(
