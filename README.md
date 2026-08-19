@@ -41,3 +41,13 @@ Fits made using:
 ```
 https://github.com/campaneros/energy-resolution-fitter/blob/main/fit.sh
 ```
+
+
+Timestamps of runs (to be uploaded yet):
+```
+timestamps_runs.txt
+```
+made with
+```
+cd /eos/cms/store/group/dpg_ecal/comm_ecal/upgrade/testbeam/ECALTB_H4_Jun2026/EB; rm /eos/user/r/rgargiul/www/timestamps_runs.txt; for f in $(ls -1d 2*); do ls -lartd $f | head -n 2 | tail -n 1 | awk '{print $6" "$7" "$8" "$9}' | awk -F "_" '{print $1}' >> /eos/user/r/rgargiul/www/timestamps_runs.txt; done
+```
