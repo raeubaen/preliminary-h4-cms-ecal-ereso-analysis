@@ -15,6 +15,11 @@ Reconstruction from:
 https://gitlab.cern.ch/ecal-daq-upgrade/DANTE/-/tags/v2026-260819
 ```
 
+Template used (seed crystal @ 100 GeV, ch185, from run 20521):
+```
+https://lfrosina.web.cern.ch/TestBeam/AllTemplates/template_library_default.root
+```
+
 Runner (all reco jobs):
 ```
 process_good_runs_2026_parallel.sh
