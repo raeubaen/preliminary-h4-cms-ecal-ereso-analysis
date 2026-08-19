@@ -3,6 +3,8 @@ Run list:
 https://docs.google.com/spreadsheets/d/1hvROf58AUvwlSgFveNDmVWZLXPj80i-xjC784sdWq4A/edit?usp=sharing
 ```
 
+List of good electron runs in this repo
+
 Beamfiles in the ```beamfiles``` folder
 
 Beamline energy spread details:
