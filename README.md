@@ -22,7 +22,8 @@
     - `run_collimators_match.csv`
   - Beamline energy spread details:
     - [CERN document](https://cds.cern.ch/record/702402/files/cer-000414329.pdf)
-
+  - Syncrotron radiation besm energy spread RMS (in %): 1.92e-7* E**(5/2), Fig.4 of the paper in the link above
+  
 - **Reconstructed data**
   - Reconstructed files, using a 3×3 matrix:
     - `/eos/cms/store/group/dpg_ecal/comm_ecal/upgrade/testbeam/ECALTB_H4_Jun2026/Reco`
