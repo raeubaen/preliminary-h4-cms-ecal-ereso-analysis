@@ -39,12 +39,14 @@ Details on which runs have been used in:
 merged_runs_2026.md
 ```
 
+Same info in machine-readable format in ```merged_runs*.csv```
+
 Fits made using:
 ```
 https://github.com/campaneros/energy-resolution-fitter/blob/main/fit.sh
 ```
 
-Timestamps of runs (to be uploaded yet):
+Timestamps of runs:
 ```
 timestamps_runs.txt
 ```
