@@ -5,7 +5,9 @@ https://docs.google.com/spreadsheets/d/1hvROf58AUvwlSgFveNDmVWZLXPj80i-xjC784sdW
 
 List of good electron runs in this repo
 
-Beamfiles in the ```beamfiles``` folder
+Beam elements logs in the ```beamfiles``` folder
+
+Collimators info for each run: in the ```run_collimators_match.csv``` file
 
 Beamline energy spread details:
 ```
@@ -42,7 +44,6 @@ Fits made using:
 https://github.com/campaneros/energy-resolution-fitter/blob/main/fit.sh
 ```
 
-
 Timestamps of runs (to be uploaded yet):
 ```
 timestamps_runs.txt
@@ -51,3 +52,4 @@ made with
 ```
 cd /eos/cms/store/group/dpg_ecal/comm_ecal/upgrade/testbeam/ECALTB_H4_Jun2026/EB; rm /eos/user/r/rgargiul/www/timestamps_runs.txt; for f in $(ls -1d 2*); do echo "$f $(ls -lart $f | head -n 2 | tail -n 1 | awk '{print $6" "$7" "$8}')"; done
 ```
+ 
