@@ -48,7 +48,7 @@
   - Collimator information for merged runs at **energy level**:
     - `colls_energies_summary_*`
     - Almost all runs at the same energy have the same collimator settings.
-    - The **BES can be evaluated directly** from these files.
+    - The **BES is evaluated directly** in these files (with ```=SQRT( ((D2-C2)/2)^2 + ((F2-E2)/2)^2)/(27*SQRT(3))```)
 
 - **Energy-resolution fits**
   - Fits performed using:
