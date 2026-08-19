@@ -46,7 +46,7 @@ Fits made using:
 https://github.com/campaneros/energy-resolution-fitter/blob/main/fit.sh
 ```
 
-Timestamps of runs (to be uploaded yet):
+Timestamps of runs:
 ```
 timestamps_runs.txt
 ```
