@@ -58,7 +58,3 @@ CATIA DEFAULT filter. Where available, only runs with **momentum slit closed** a
 | 100 | 21056 21057 21058 | slit closed (15 runs from collimator/slit scans excluded: 20932–20936, 20956–20972) |
 | 150 | 20938 20950 20951 20953 20954 | **slit opened / c8(-8,8)+c3(-10,10)** — no closed runs available |
 
-Improve accuracy for writing and career work
-Upgrade to Plus and use increased reasoning to refine writing, learning, applications, and career work.
-
-
