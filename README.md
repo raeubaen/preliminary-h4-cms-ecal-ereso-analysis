@@ -1,3 +1,5 @@
+Beamfiles in the ```beamfiles``` folder
+
 Reconstructed files here (3x3 matrix): 
 ```
 /eos/cms/store/group/dpg_ecal/comm_ecal/upgrade/testbeam/ECALTB_H4_Jun2026/Reco
