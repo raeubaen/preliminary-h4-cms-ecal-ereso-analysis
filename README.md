@@ -7,7 +7,8 @@ List of good electron runs in this repo
 
 Beam elements logs in the ```beamfiles``` folder
 
-Collimators info for each run: in the ```run_collimators_match.csv``` file
+Collimators info for each run in the ```run_collimators_match.csv``` file
+
 
 Beamline energy spread details:
 ```
@@ -38,6 +39,8 @@ Details on which runs have been used in:
 ```
 merged_runs_2026.md
 ```
+
+Collimators info for the merged runs: in the ```beamfiles/colls_runs_*ohm.csv``` files
 
 Same info in machine-readable format in ```merged_runs*.csv```
 
