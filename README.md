@@ -3,6 +3,11 @@ Reconstructed files here (3x3 matrix):
 /eos/cms/store/group/dpg_ecal/comm_ecal/upgrade/testbeam/ECALTB_H4_Jun2026/Reco
 ```
 
+Reconstruction from:
+```
+https://gitlab.cern.ch/ecal-daq-upgrade/DANTE/-/tags/v2026-260819
+```
+
 Runner (all reco jobs):
 ```
 process_good_runs_2026_parallel.sh
