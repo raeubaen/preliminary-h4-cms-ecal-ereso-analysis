@@ -1,5 +1,10 @@
 Beamfiles in the ```beamfiles``` folder
 
+Beamline energy spread details:
+```
+https://cds.cern.ch/record/702402/files/cer-000414329.pdf
+```
+
 Reconstructed files here (3x3 matrix): 
 ```
 /eos/cms/store/group/dpg_ecal/comm_ecal/upgrade/testbeam/ECALTB_H4_Jun2026/Reco
