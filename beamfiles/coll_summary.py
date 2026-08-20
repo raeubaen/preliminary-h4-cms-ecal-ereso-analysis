@@ -76,7 +76,7 @@ with open(RUN_FILE, "r") as f:
         timestamp_utc = timestamp_local.tz_convert("UTC")
 
         runs.append({
-            "numero_run": int(run_number),
+            "number_run": int(run_number),
             "timestamp_local": timestamp_local,
             "timestamp_utc": timestamp_utc,
         })
@@ -114,9 +114,10 @@ df["collimatore_timestamp_gva"] = (
 # ============================================================
 # 4. Seleziona i collimatori che ci interessano
 # ============================================================
+print(df.columns)
 
 output = df[[
-    "numero_run",
+    "number_run",
 
     # Timestamp del run
     "timestamp_local",
@@ -129,16 +130,16 @@ output = df[[
     # Settings
     "XCHV.022.131 _JAW1_REF",
     "XCHV.022.131 _JAW2_REF",
-    "XCHV.022.197 _JAW1_REF",
-    "XCHV.022.197 _JAW2_REF",
+    "XCSV.022.386 _JAW1_REF",
+    "XCSV.022.386 _JAW2_REF",
 ]].copy()
 
 # Rinomina le colonne
 output = output.rename(columns={
     "XCHV.022.131 _JAW1_REF": "collimatore131x",
     "XCHV.022.131 _JAW2_REF": "collimatore131y",
-    "XCHV.022.197 _JAW1_REF": "collimatore197x",
-    "XCHV.022.197 _JAW2_REF": "collimatore197y",
+    "XCSV.022.386 _JAW1_REF": "collimatore386x",
+    "XCSV.022.386 _JAW2_REF": "collimatore386y",
 })
 
 

@@ -55,8 +55,8 @@ def main():
         "number_run",
         "collimatore131x",
         "collimatore131y",
-        "collimatore197x",
-        "collimatore197y",
+        "collimatore386x",
+        "collimatore386y",
     }
 
     missing = required_coll - set(coll_df.columns)
@@ -74,8 +74,8 @@ def main():
             "number_run",
             "collimatore131x",
             "collimatore131y",
-            "collimatore197x",
-            "collimatore197y",
+            "collimatore386x",
+            "collimatore386y",
         ]
     ]
 
@@ -108,8 +108,8 @@ def main():
             [
                 "collimatore131x",
                 "collimatore131y",
-                "collimatore197x",
-                "collimatore197y",
+                "collimatore386x",
+                "collimatore386y",
             ]
         ].isna().any(axis=1)
     ]
