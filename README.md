@@ -18,11 +18,12 @@
 - **Beam information**
   - Beam element logs:
     - Available in the `beamfiles/` folder.
-  - Collimator information for each run:
-    - `run_collimators_match.csv`
+  - Collimator information for each run (timestamps from Nikos + info from elogs):
+    - `beamfiles/good_ele_runs_collimators_match_overwritten_with_elog_info.csv`
+    - Elogs: ``` https://cmsonline.cern.ch/cms-elog/1345489```,  ```https://cmsonline.cern.ch/cms-elog/1345603```, ```https://cmsonline.cern.ch/cms-elog/1345545```
   - Beamline energy spread details:
     - [CERN document](https://cds.cern.ch/record/702402/files/cer-000414329.pdf)
-  - Syncrotron radiation besm energy spread RMS (in %): 1.92e-7* E**(5/2), Fig.4 of the paper in the link above
+  - Syncrotron radiation beam energy spread RMS (in %): 1.92e-7* E**(5/2), Fig.4 of the paper in the link above
   
 - **Reconstructed data**
   - Reconstructed files, using a 3×3 matrix:
@@ -48,7 +49,7 @@
     - `beamfiles/colls_runs_*ohm.csv`
   - Collimator information for merged runs at **energy level**:
     - `colls_energies_summary_*`
-    - Almost all runs at the same energy have the same collimator settings.
+    - Almost all runs at the same energy have the same collimator settings
     - The **BES is evaluated directly** in these files (with ```=SQRT( ((D2-C2)/2)^2 + ((F2-E2)/2)^2)/(27*SQRT(3))```)
 
 - **Energy-resolution fits**
